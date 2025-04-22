@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Mapa Interativo RS</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapa Interativo - Noroeste RS</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div id="map"></div>
-    <script src="script.js"></script>
+  <h1>Mapa Interativo - Noroeste do Rio Grande do Sul</h1>
+  <div id="mapa-container">
+    <svg id="mapa-rs" viewBox="0 0 800 700">
+      <!-- As cidades serão inseridas dinamicamente -->
+    </svg>
+  </div>
+  <div id="tooltip" class="tooltip" style="display: none;"></div>
+  <div id="legenda">
+    <h2>Legenda - Faixa Populacional</h2>
+    <ul>
+      <li><span class="cor faixa1"></span> Até 5.000 habitantes</li>
+      <li><span class="cor faixa2"></span> Até 15.000 habitantes</li>
+      <li><span class="cor faixa3"></span> Até 30.000 habitantes</li>
+      <li><span class="cor faixa4"></span> Até 100.000 habitantes</li>
+      <li><span class="cor ijuí"></span> Cidade base: Ijuí</li>
+    </ul>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>

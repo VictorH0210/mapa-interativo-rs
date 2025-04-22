@@ -1,46 +1,29 @@
-const map = L.map('map').setView([-28.5, -53.5], 8);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-}).addTo(map);
-
-// Exemplo com poucas cidades para representar
+// Exemplo básico com algumas cidades
 const cidades = [
-    {
-        nome: "Santa Rosa",
-        pop: "73.575",
-        idh: "0.776",
-        pib: "48.000",
-        coord: [-27.8706, -54.4796]
-    },
-    {
-        nome: "Ijuí",
-        pop: "83.764",
-        idh: "0.776",
-        pib: "52.000",
-        coord: [-28.3881, -53.9202]
-    },
-    {
-        nome: "Cruz Alta",
-        pop: "59.003",
-        idh: "0.765",
-        pib: "42.000",
-        coord: [-28.645, -53.6056]
-    }
+  { nome: 'Ijuí', populacao: 83000, idh: 0.776, pib: 41000, distancia: '0 km', destaque: true },
+  { nome: 'Santa Rosa', populacao: 76000, idh: 0.787, pib: 42000, distancia: '70 km' },
+  { nome: 'Três de Maio', populacao: 24000, idh: 0.775, pib: 39000, distancia: '44 km' },
+  // ...adicionar as demais cidades
 ];
 
-// Adiciona marcadores para cidades listadas
+const mapa = document.getElementById('mapa-rs');
+const tooltip = document.getElementById('tooltip');
+
 cidades.forEach(cidade => {
-    const marker = L.circleMarker(cidade.coord, {
-        radius: 8,
-        fillColor: "#2b83ba",
-        color: "#fff",
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.9
-    }).addTo(map);
-    
-    marker.bindTooltip(
-        `<strong>${cidade.nome}</strong><br>População: ${cidade.pop}<br>IDH: ${cidade.idh}<br>PIB per capita: R$ ${cidade.pib}`,
-        { permanent: false, direction: "top" }
-    );
+  const el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  el.setAttribute("r", 6);
+  el.setAttribute("cx", Math.random() * 700 + 50); // posição fictícia
+  el.setAttribute("cy", Math.random() * 600 + 50);
+  el.setAttribute("fill", cidade.destaque ? 'orange' :
+    cidade.populacao <= 5000 ? '#d0e4f7' :
+    cidade.populacao <= 15000 ? '#80bfff' :
+    cidade.populacao <= 30000 ? '#0073e6' : '#003366');
+  el.addEventListener("mouseover", e => {
+    tooltip.innerHTML = `<strong>${cidade.nome}</strong><br>População: ${cidade.populacao}<br>IDH: ${cidade.idh}<br>PIB per capita: R$ ${cidade.pib}<br>Distância até Ijuí: ${cidade.distancia}`;
+    tooltip.style.display = "block";
+    tooltip.style.left = `${e.pageX + 10}px`;
+    tooltip.style.top = `${e.pageY + 10}px`;
+  });
+  el.addEventListener("mouseout", () => tooltip.style.display = "none");
+  mapa.appendChild(el);
 });
