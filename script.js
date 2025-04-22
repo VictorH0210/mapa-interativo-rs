@@ -1,29 +1,34 @@
-// Exemplo básico com algumas cidades
-const cidades = [
-  { nome: 'Ijuí', populacao: 83000, idh: 0.776, pib: 41000, distancia: '0 km', destaque: true },
-  { nome: 'Santa Rosa', populacao: 76000, idh: 0.787, pib: 42000, distancia: '70 km' },
-  { nome: 'Três de Maio', populacao: 24000, idh: 0.775, pib: 39000, distancia: '44 km' },
-  // ...adicionar as demais cidades
-];
+document.addEventListener("DOMContentLoaded", function () {
+  const tooltip = document.getElementById("tooltip");
+  const cidades = {
+    "Ijuí": { pop: 83000, idh: 0.776, pib: 41000, dist: "0 km", cor: "orange" },
+    "Santa Rosa": { pop: 76000, idh: 0.787, pib: 42000, dist: "70 km" },
+    "Três de Maio": { pop: 24000, idh: 0.775, pib: 39000, dist: "44 km" },
+    // Adicionar as outras 93 aqui
+  };
 
-const mapa = document.getElementById('mapa-rs');
-const tooltip = document.getElementById('tooltip');
+  const svgObject = document.getElementById("mapa-svg");
+  svgObject.addEventListener("load", function () {
+    const svgDoc = svgObject.contentDocument;
 
-cidades.forEach(cidade => {
-  const el = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  el.setAttribute("r", 6);
-  el.setAttribute("cx", Math.random() * 700 + 50); // posição fictícia
-  el.setAttribute("cy", Math.random() * 600 + 50);
-  el.setAttribute("fill", cidade.destaque ? 'orange' :
-    cidade.populacao <= 5000 ? '#d0e4f7' :
-    cidade.populacao <= 15000 ? '#80bfff' :
-    cidade.populacao <= 30000 ? '#0073e6' : '#003366');
-  el.addEventListener("mouseover", e => {
-    tooltip.innerHTML = `<strong>${cidade.nome}</strong><br>População: ${cidade.populacao}<br>IDH: ${cidade.idh}<br>PIB per capita: R$ ${cidade.pib}<br>Distância até Ijuí: ${cidade.distancia}`;
-    tooltip.style.display = "block";
-    tooltip.style.left = `${e.pageX + 10}px`;
-    tooltip.style.top = `${e.pageY + 10}px`;
+    for (const [nome, dados] of Object.entries(cidades)) {
+      const el = svgDoc.getElementById(nome);
+      if (el) {
+        el.style.fill = dados.cor || (
+          dados.pop <= 5000 ? "#d0e4f7" :
+          dados.pop <= 15000 ? "#80bfff" :
+          dados.pop <= 30000 ? "#0073e6" : "#003366"
+        );
+        el.addEventListener("mousemove", (e) => {
+          tooltip.innerHTML = `<strong>${nome}</strong><br>População: ${dados.pop}<br>IDH: ${dados.idh}<br>PIB per capita: R$ ${dados.pib}<br>Distância até Ijuí: ${dados.dist}`;
+          tooltip.style.display = "block";
+          tooltip.style.left = e.pageX + 10 + "px";
+          tooltip.style.top = e.pageY + 10 + "px";
+        });
+        el.addEventListener("mouseleave", () => {
+          tooltip.style.display = "none";
+        });
+      }
+    }
   });
-  el.addEventListener("mouseout", () => tooltip.style.display = "none");
-  mapa.appendChild(el);
 });
